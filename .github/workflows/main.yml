@@ -31,6 +31,13 @@ jobs:
       - name: Install dependencies
         run: composer install
 
+      - name: Fix module autoloading structure
+        run: |
+          # Fix issues with folder structure
+          mkdir -p Modules/Auth/Routes
+          cp -r Modules/Auth/routes/* Modules/Auth/Routes/
+          composer dump-autoload
+
 #      - name: Clear and cache configurations
 #        run: |
 #          php artisan clear-compiled
