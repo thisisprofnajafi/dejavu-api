@@ -35,7 +35,7 @@ jobs:
         uses: SamKirkland/FTP-Deploy-Action@4.0.0
         with:
           server: ftp.abolfazlnajafi.com
-          username: dejavu-dashboard@abolfazlnajafi.com
+          username: dejavu-api@abolfazlnajafi.com
           password: Prof48017421@#
           server-dir: /
           
