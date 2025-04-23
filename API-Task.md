@@ -118,9 +118,12 @@ Based on the menu structure from our dashboard, implement the following modules:
   - [ ] Pricing endpoints
   - [ ] Notifications endpoints
 - [x] User Management endpoints
-- [ ] Customer Management endpoints
+- [x] Customer Management endpoints
 - [ ] Ticket System endpoints
-- [ ] FAQ Management endpoints
+- [x] FAQ Management endpoints
+  - [x] FAQ Category CRUD endpoints
+  - [x] FAQ CRUD endpoints
+  - [x] FAQ ordering functionality
 - [ ] Commission Management endpoints
 - [x] Content Management Module
   - [x] Posts CRUD endpoints

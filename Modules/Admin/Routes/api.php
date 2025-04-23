@@ -5,6 +5,9 @@ use Modules\Admin\Http\Controllers\DashboardController;
 use Modules\Admin\Http\Controllers\SettingsController;
 use Modules\Admin\Http\Controllers\UserController;
 use Modules\Admin\Http\Controllers\RoleController;
+use Modules\Admin\Http\Controllers\FaqController;
+use Modules\Admin\Http\Controllers\FaqCategoryController;
+use Modules\Admin\Http\Controllers\CustomerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,6 +55,36 @@ Route::prefix('v1')->middleware(['auth:sanctum'])->group(function () {
             // Permission routes
             Route::get('/permissions/all', [RoleController::class, 'permissions']);
             Route::post('/permissions', [RoleController::class, 'createPermission']);
+        });
+        
+        // Customer management routes
+        Route::prefix('customers')->middleware('permission:manage customers')->group(function () {
+            Route::get('/', [CustomerController::class, 'index']);
+            Route::post('/', [CustomerController::class, 'store']);
+            Route::get('/{id}', [CustomerController::class, 'show']);
+            Route::put('/{id}', [CustomerController::class, 'update']);
+            Route::delete('/{id}', [CustomerController::class, 'destroy']);
+        });
+        
+        // FAQ management routes
+        Route::prefix('faqs')->middleware('permission:manage faqs')->group(function () {
+            // FAQ Category routes
+            Route::prefix('categories')->group(function () {
+                Route::get('/', [FaqCategoryController::class, 'index']);
+                Route::post('/', [FaqCategoryController::class, 'store']);
+                Route::get('/{id}', [FaqCategoryController::class, 'show']);
+                Route::put('/{id}', [FaqCategoryController::class, 'update']);
+                Route::delete('/{id}', [FaqCategoryController::class, 'destroy']);
+            });
+            
+            // FAQ routes
+            Route::get('/', [FaqController::class, 'index']);
+            Route::post('/', [FaqController::class, 'store']);
+            Route::get('/{id}', [FaqController::class, 'show']);
+            Route::put('/{id}', [FaqController::class, 'update']);
+            Route::delete('/{id}', [FaqController::class, 'destroy']);
+            Route::post('/order', [FaqController::class, 'updateOrder']);
+            Route::get('/category/{categoryId}', [FaqController::class, 'getByCategory']);
         });
     });
 }); 

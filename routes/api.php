@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
+use Modules\Admin\Http\Controllers\FaqController;
+use Modules\Admin\Http\Controllers\FaqCategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +24,15 @@ Route::prefix('v1')->group(function () {
     Route::post('login', [AuthController::class, 'login']);
     Route::post('forgot-password', [AuthController::class, 'forgotPassword']);
     Route::post('reset-password', [AuthController::class, 'resetPassword']);
+    
+    // Public FAQ routes
+    Route::prefix('faqs')->group(function () {
+        Route::get('/', [FaqController::class, 'index']);
+        Route::get('/{id}', [FaqController::class, 'show']);
+        Route::get('/category/{categoryId}', [FaqController::class, 'getByCategory']);
+        Route::get('/categories', [FaqCategoryController::class, 'index']);
+        Route::get('/categories/{id}', [FaqCategoryController::class, 'show']);
+    });
     
     // Protected routes
     Route::middleware('auth:sanctum')->group(function () {
