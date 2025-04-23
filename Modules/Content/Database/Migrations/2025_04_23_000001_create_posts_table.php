@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('status')->default('draft'); // draft, published
             $table->timestamp('published_at')->nullable();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('featured_image')->nullable();
             $table->timestamps();
         });
     }

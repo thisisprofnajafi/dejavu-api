@@ -8,6 +8,7 @@ use Illuminate\Http\JsonResponse;
 use Modules\Content\Models\Page;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class PageController extends Controller
 {
@@ -28,10 +29,11 @@ class PageController extends Controller
         
         // Filter by parent
         if ($request->has('parent_id')) {
-            $query->where('parent_id', $request->parent_id);
-        } else {
-            // Only top-level pages by default
-            $query->whereNull('parent_id');
+            if ($request->parent_id === 'null') {
+                $query->whereNull('parent_id');
+            } else {
+                $query->where('parent_id', $request->parent_id);
+            }
         }
         
         // Published filter
@@ -75,22 +77,47 @@ class PageController extends Controller
             'order' => 'nullable|integer'
         ]);
 
-        $page = Page::create([
-            'title' => $request->title,
-            'slug' => Str::slug($request->title),
-            'content' => $request->content,
-            'status' => $request->status,
-            'published_at' => $request->published_at,
-            'user_id' => Auth::id(),
-            'parent_id' => $request->parent_id,
-            'order' => $request->order ?? 0
-        ]);
+        // Check for circular reference
+        if ($request->has('parent_id') && $request->parent_id) {
+            try {
+                $this->checkCircularReference(null, $request->parent_id);
+            } catch (\Exception $e) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => $e->getMessage()
+                ], 422);
+            }
+        }
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Page created successfully',
-            'data' => $page->load('author')
-        ], 201);
+        DB::beginTransaction();
+        
+        try {
+            $page = Page::create([
+                'title' => $request->title,
+                'slug' => Str::slug($request->title),
+                'content' => $request->content,
+                'status' => $request->status,
+                'published_at' => $request->status == 'published' ? ($request->published_at ?? now()) : null,
+                'user_id' => Auth::id(),
+                'parent_id' => $request->parent_id,
+                'order' => $request->order ?? 0
+            ]);
+            
+            DB::commit();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Page created successfully',
+                'data' => $page->load(['author', 'parent', 'children'])
+            ], 201);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to create page: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -130,28 +157,53 @@ class PageController extends Controller
         ]);
 
         // Prevent circular reference
-        if ($request->parent_id == $id) {
+        if ($request->has('parent_id') && $request->parent_id == $id) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Page cannot be its own parent'
             ], 422);
         }
+        
+        // Check for circular reference
+        if ($request->has('parent_id') && $request->parent_id) {
+            try {
+                $this->checkCircularReference($id, $request->parent_id);
+            } catch (\Exception $e) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => $e->getMessage()
+                ], 422);
+            }
+        }
 
-        $page->update([
-            'title' => $request->title,
-            'slug' => Str::slug($request->title),
-            'content' => $request->content,
-            'status' => $request->status,
-            'published_at' => $request->published_at,
-            'parent_id' => $request->parent_id,
-            'order' => $request->order ?? $page->order
-        ]);
+        DB::beginTransaction();
+        
+        try {
+            $page->update([
+                'title' => $request->title,
+                'slug' => Str::slug($request->title),
+                'content' => $request->content,
+                'status' => $request->status,
+                'published_at' => $request->status == 'published' ? ($request->published_at ?? $page->published_at ?? now()) : null,
+                'parent_id' => $request->parent_id,
+                'order' => $request->order ?? $page->order
+            ]);
+            
+            DB::commit();
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Page updated successfully',
-            'data' => $page->load(['author', 'parent', 'children'])
-        ]);
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Page updated successfully',
+                'data' => $page->fresh()->load(['author', 'parent', 'children'])
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to update page: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -172,12 +224,25 @@ class PageController extends Controller
             ], 422);
         }
         
-        $page->delete();
+        DB::beginTransaction();
         
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Page deleted successfully'
-        ]);
+        try {
+            $page->delete();
+            
+            DB::commit();
+            
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Page deleted successfully'
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to delete page: ' . $e->getMessage()
+            ], 500);
+        }
     }
     
     /**
@@ -196,5 +261,27 @@ class PageController extends Controller
             'status' => 'success',
             'data' => $page
         ]);
+    }
+    
+    /**
+     * Check for circular reference when setting a parent.
+     *
+     * @param int|null $pageId
+     * @param int $parentId
+     * @throws \Exception
+     */
+    private function checkCircularReference(?int $pageId, int $parentId): void
+    {
+        $parent = Page::findOrFail($parentId);
+        
+        // If our page is the parent of our proposed parent, that's a circular reference
+        if ($pageId && $parent->parent_id == $pageId) {
+            throw new \Exception('Circular reference detected in page hierarchy');
+        }
+        
+        // Continue checking up the tree
+        if ($parent->parent_id) {
+            $this->checkCircularReference($pageId, $parent->parent_id);
+        }
     }
 } 
