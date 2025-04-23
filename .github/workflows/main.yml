@@ -1,0 +1,63 @@
+on:
+  push:
+    branches:
+      - main
+
+name: 🚀 Deploy website on push (Master)
+
+jobs:
+  # Job 1: Web Deployment
+  web-deploy:
+    name: 🎉 Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🚚 Get latest code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.4
+
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v2
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
+
+      - name: Install dependencies
+        run: composer install
+
+#      - name: Clear and cache configurations
+#        run: |
+#          php artisan clear-compiled
+#          composer dump-autoload
+#          php artisan config:cache
+#          php artisan route:cache
+#          php artisan view:cache
+#          php artisan optimize
+
+      - name: 📂 Sync files
+        uses: SamKirkland/FTP-Deploy-Action@4.0.0
+        with:
+          server: ftp.abolfazlnajafi.com
+          username: dejavu-dashboard@abolfazlnajafi.com
+          password: Prof48017421@#
+          server-dir: /
+          
+      - name: Notify Telegram
+        env:
+          TELEGRAM_BOT_TOKEN: 7488407974:AAFl4Ek9IanbvlkKlRoikQAqdkDtFYbD0Gc
+          TELEGRAM_CHAT_ID: -1002559619852_1
+          GITHUB_ACTOR: ${{ github.actor }}
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+        run: |
+          FORMATTED_COMMIT_MESSAGE=$(echo "${COMMIT_MESSAGE}" | sed 's/$/\\n/' | sed ':a;N;$!ba;s/\n/\\n/g')
+          MESSAGE=$(echo -e "💻 <b>Dejavu API Backend</b> 💻\n\n <b>Status:</b> Deployed Successful\n\n👤 <b>User:</b> ${GITHUB_ACTOR}\n <blockquote>${FORMATTED_COMMIT_MESSAGE}</blockquote>")
+          curl -s -X POST https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage \
+            -d chat_id=${TELEGRAM_CHAT_ID} \
+            -d text="${MESSAGE}" \
+            -d parse_mode="HTML"
