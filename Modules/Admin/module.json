@@ -1,0 +1,11 @@
+{
+    "name": "Admin",
+    "alias": "admin",
+    "description": "Admin dashboard and management module",
+    "keywords": [],
+    "priority": 1,
+    "providers": [
+        "Modules\\Admin\\Providers\\AdminServiceProvider"
+    ],
+    "files": []
+} 
