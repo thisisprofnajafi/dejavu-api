@@ -31,33 +31,6 @@ jobs:
       - name: Install dependencies
         run: composer install --no-scripts
 
-      - name: Fix PSR-4 autoloading and module structure
-        run: |
-          # Create Routes directory
-          mkdir -p Modules/Auth/Routes
-          
-          # Create an api.php file if it doesn't exist
-          echo '<?php
-          
-          use Illuminate\Support\Facades\Route;
-          
-          Route::prefix("auth")->group(function () {
-              // Define your auth-related API routes here
-          });' > Modules/Auth/Routes/api.php
-          
-          # Update RouteServiceProvider to handle missing route files
-          if [ -f "Modules/Auth/app/Providers/RouteServiceProvider.php" ]; then
-            sed -i 's/Route::middleware("api")->prefix("api")->name("api.")->group(module_path($this->name, "\/routes\/api.php"));/Route::middleware("api")->prefix("api")->name("api.")->group(function() { $path = module_path($this->name, "\/Routes\/api.php"); if(file_exists($path)) { require $path; } });/g' Modules/Auth/app/Providers/RouteServiceProvider.php
-          fi
-          
-          # Clear Laravel caches
-          php artisan config:clear
-          php artisan route:clear
-          php artisan cache:clear
-          
-          # Regenerate autoload files
-          composer dump-autoload
-
       - name: 📂 Sync files
         uses: SamKirkland/FTP-Deploy-Action@4.0.0
         with:
