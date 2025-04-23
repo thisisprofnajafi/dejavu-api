@@ -19,28 +19,6 @@ jobs:
         with:
           php-version: 8.2
 
-      - name: Fix PSR-4 autoloading in composer.json
-        run: |
-          # Create a temporary file with proper PSR-4 mappings
-          cat << 'EOF' > composer.json.new
-          {
-              "autoload": {
-                  "psr-4": {
-                      "App\\": "app/",
-                      "Database\\Factories\\": "database/factories/",
-                      "Database\\Seeders\\": "database/seeders/",
-                      "Modules\\": "Modules/",
-                      "Modules\\Auth\\": "Modules/Auth/app/",
-                      "Modules\\Auth\\Database\\Seeders\\": "Modules/Auth/database/seeders/"
-                  }
-              }
-          }
-          EOF
-          
-          # Merge the PSR-4 mappings with existing composer.json
-          jq -s '.[0] * .[1]' composer.json composer.json.new > composer.json.tmp
-          mv composer.json.tmp composer.json
-
       - name: Cache Composer packages
         id: composer-cache
         uses: actions/cache@v4
