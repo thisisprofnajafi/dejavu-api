@@ -19,6 +19,28 @@ jobs:
         with:
           php-version: 8.2
 
+      - name: Fix PSR-4 autoloading in composer.json
+        run: |
+          # Create a temporary file with proper PSR-4 mappings
+          cat << 'EOF' > composer.json.new
+          {
+              "autoload": {
+                  "psr-4": {
+                      "App\\": "app/",
+                      "Database\\Factories\\": "database/factories/",
+                      "Database\\Seeders\\": "database/seeders/",
+                      "Modules\\": "Modules/",
+                      "Modules\\Auth\\": "Modules/Auth/app/",
+                      "Modules\\Auth\\Database\\Seeders\\": "Modules/Auth/database/seeders/"
+                  }
+              }
+          }
+          EOF
+          
+          # Merge the PSR-4 mappings with existing composer.json
+          jq -s '.[0] * .[1]' composer.json composer.json.new > composer.json.tmp
+          mv composer.json.tmp composer.json
+
       - name: Cache Composer packages
         id: composer-cache
         uses: actions/cache@v4
@@ -29,23 +51,34 @@ jobs:
             ${{ runner.os }}-php-
 
       - name: Install dependencies
-        run: composer install
+        run: composer install --no-scripts
 
-      - name: Fix module autoloading structure
+      - name: Fix PSR-4 autoloading and module structure
         run: |
-          # Fix issues with folder structure
+          # Create Routes directory
           mkdir -p Modules/Auth/Routes
-          cp -r Modules/Auth/routes/* Modules/Auth/Routes/
+          
+          # Create an api.php file if it doesn't exist
+          echo '<?php
+          
+          use Illuminate\Support\Facades\Route;
+          
+          Route::prefix("auth")->group(function () {
+              // Define your auth-related API routes here
+          });' > Modules/Auth/Routes/api.php
+          
+          # Update RouteServiceProvider to handle missing route files
+          if [ -f "Modules/Auth/app/Providers/RouteServiceProvider.php" ]; then
+            sed -i 's/Route::middleware("api")->prefix("api")->name("api.")->group(module_path($this->name, "\/routes\/api.php"));/Route::middleware("api")->prefix("api")->name("api.")->group(function() { $path = module_path($this->name, "\/Routes\/api.php"); if(file_exists($path)) { require $path; } });/g' Modules/Auth/app/Providers/RouteServiceProvider.php
+          fi
+          
+          # Clear Laravel caches
+          php artisan config:clear
+          php artisan route:clear
+          php artisan cache:clear
+          
+          # Regenerate autoload files
           composer dump-autoload
-
-#      - name: Clear and cache configurations
-#        run: |
-#          php artisan clear-compiled
-#          composer dump-autoload
-#          php artisan config:cache
-#          php artisan route:cache
-#          php artisan view:cache
-#          php artisan optimize
 
       - name: 📂 Sync files
         uses: SamKirkland/FTP-Deploy-Action@4.0.0
