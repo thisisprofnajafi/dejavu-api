@@ -8,6 +8,7 @@ use Modules\Admin\Http\Controllers\RoleController;
 use Modules\Admin\Http\Controllers\FaqController;
 use Modules\Admin\Http\Controllers\FaqCategoryController;
 use Modules\Admin\Http\Controllers\CustomerController;
+use Modules\Admin\Http\Controllers\TicketController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,6 +31,16 @@ Route::prefix('v1')->middleware(['auth:sanctum'])->group(function () {
             Route::get('/', [SettingsController::class, 'index']);
             Route::get('/{type}', [SettingsController::class, 'getSettingsByType']);
             Route::put('/{type}', [SettingsController::class, 'updateSettings']);
+            
+            // Resume Settings routes
+            Route::prefix('resume')->group(function () {
+                Route::get('/service-duration', [SettingsController::class, 'getResumeDurationSettings']);
+                Route::put('/service-duration', [SettingsController::class, 'updateResumeDurationSettings']);
+                Route::get('/pricing', [SettingsController::class, 'getResumePricingSettings']);
+                Route::put('/pricing', [SettingsController::class, 'updateResumePricingSettings']);
+                Route::get('/notifications', [SettingsController::class, 'getResumeNotificationSettings']);
+                Route::put('/notifications', [SettingsController::class, 'updateResumeNotificationSettings']);
+            });
         });
         
         // User management routes
@@ -85,6 +96,23 @@ Route::prefix('v1')->middleware(['auth:sanctum'])->group(function () {
             Route::delete('/{id}', [FaqController::class, 'destroy']);
             Route::post('/order', [FaqController::class, 'updateOrder']);
             Route::get('/category/{categoryId}', [FaqController::class, 'getByCategory']);
+        });
+        
+        // Ticket System routes
+        Route::prefix('tickets')->middleware('permission:manage tickets')->group(function () {
+            Route::get('/', [TicketController::class, 'index']);
+            Route::post('/', [TicketController::class, 'store']);
+            Route::get('/{id}', [TicketController::class, 'show']);
+            Route::put('/{id}', [TicketController::class, 'update']);
+            Route::delete('/{id}', [TicketController::class, 'destroy']);
+            
+            // Ticket status management
+            Route::put('/{id}/status', [TicketController::class, 'updateStatus']);
+            Route::put('/{id}/assign', [TicketController::class, 'assignTicket']);
+            
+            // Ticket comments
+            Route::post('/{id}/comments', [TicketController::class, 'addComment']);
+            Route::get('/{id}/comments', [TicketController::class, 'getComments']);
         });
     });
 }); 

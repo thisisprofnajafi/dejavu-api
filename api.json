@@ -1,0 +1,13 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "DejaVu API Documentation",
+        "version": "1.0.0",
+        "description": "API documentation for DejaVu Backend"
+    },
+    "servers": [
+        {
+            "url": "http://localhost/api"
+        }
+    ]
+}
