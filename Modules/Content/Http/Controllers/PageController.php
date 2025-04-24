@@ -9,7 +9,9 @@ use Modules\Content\Models\Page;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use OpenApi\Attributes as OA;
 
+#[OA\Tag(name: 'Pages', description: 'API endpoints for page management')]
 class PageController extends Controller
 {
     /**
@@ -18,6 +20,52 @@ class PageController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
+    #[OA\Get(
+        path: '/api/v1/content/pages',
+        summary: 'Get all pages',
+        description: 'Returns a paginated list of pages',
+        security: [['bearerAuth' => []]]
+    )]
+    #[OA\Parameter(
+        name: 'status',
+        in: 'query',
+        description: 'Filter by status (draft or published)',
+        schema: new OA\Schema(type: 'string', enum: ['draft', 'published'])
+    )]
+    #[OA\Parameter(
+        name: 'parent_id',
+        in: 'query',
+        description: 'Filter by parent ID (use "null" for top-level pages)',
+        schema: new OA\Schema(type: 'string')
+    )]
+    #[OA\Parameter(
+        name: 'published',
+        in: 'query',
+        description: 'Filter by published status',
+        schema: new OA\Schema(type: 'boolean')
+    )]
+    #[OA\Parameter(
+        name: 'search',
+        in: 'query',
+        description: 'Search in title and content',
+        schema: new OA\Schema(type: 'string')
+    )]
+    #[OA\Parameter(
+        name: 'per_page',
+        in: 'query',
+        description: 'Items per page',
+        schema: new OA\Schema(type: 'integer', default: 15)
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'List of pages',
+        content: new OA\JsonContent(
+            properties: [
+                new OA\Property(property: 'status', type: 'string', example: 'success'),
+                new OA\Property(property: 'data', type: 'object')
+            ]
+        )
+    )]
     public function index(Request $request): JsonResponse
     {
         $query = Page::query();
@@ -66,6 +114,46 @@ class PageController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
+    #[OA\Post(
+        path: '/api/v1/content/pages',
+        summary: 'Create a new page',
+        description: 'Creates a new page and returns it',
+        security: [['bearerAuth' => []]]
+    )]
+    #[OA\RequestBody(
+        required: true,
+        content: new OA\JsonContent(
+            properties: [
+                new OA\Property(property: 'title', type: 'string', example: 'About Us'),
+                new OA\Property(property: 'content', type: 'string', example: '<p>This is the about us page content.</p>'),
+                new OA\Property(property: 'status', type: 'string', enum: ['draft', 'published'], example: 'published'),
+                new OA\Property(property: 'published_at', type: 'string', format: 'date-time', nullable: true),
+                new OA\Property(property: 'parent_id', type: 'integer', nullable: true),
+                new OA\Property(property: 'order', type: 'integer', example: 1, nullable: true)
+            ]
+        )
+    )]
+    #[OA\Response(
+        response: 201,
+        description: 'Page created successfully',
+        content: new OA\JsonContent(
+            properties: [
+                new OA\Property(property: 'status', type: 'string', example: 'success'),
+                new OA\Property(property: 'message', type: 'string', example: 'Page created successfully'),
+                new OA\Property(property: 'data', type: 'object')
+            ]
+        )
+    )]
+    #[OA\Response(
+        response: 422,
+        description: 'Validation error',
+        content: new OA\JsonContent(
+            properties: [
+                new OA\Property(property: 'status', type: 'string', example: 'error'),
+                new OA\Property(property: 'message', type: 'string', example: 'Circular reference detected in page hierarchy')
+            ]
+        )
+    )]
     public function store(Request $request): JsonResponse
     {
         $request->validate([
@@ -126,6 +214,33 @@ class PageController extends Controller
      * @param int $id
      * @return JsonResponse
      */
+    #[OA\Get(
+        path: '/api/v1/content/pages/{id}',
+        summary: 'Get a specific page',
+        description: 'Returns a specific page by ID',
+        security: [['bearerAuth' => []]]
+    )]
+    #[OA\Parameter(
+        name: 'id',
+        in: 'path',
+        required: true,
+        description: 'The page ID',
+        schema: new OA\Schema(type: 'integer')
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Page details',
+        content: new OA\JsonContent(
+            properties: [
+                new OA\Property(property: 'status', type: 'string', example: 'success'),
+                new OA\Property(property: 'data', type: 'object')
+            ]
+        )
+    )]
+    #[OA\Response(
+        response: 404,
+        description: 'Page not found'
+    )]
     public function show($id): JsonResponse
     {
         $page = Page::with(['author', 'parent', 'children'])->findOrFail($id);
@@ -143,6 +258,57 @@ class PageController extends Controller
      * @param int $id
      * @return JsonResponse
      */
+    #[OA\Put(
+        path: '/api/v1/content/pages/{id}',
+        summary: 'Update a page',
+        description: 'Updates a page and returns it',
+        security: [['bearerAuth' => []]]
+    )]
+    #[OA\Parameter(
+        name: 'id',
+        in: 'path',
+        required: true,
+        description: 'The page ID',
+        schema: new OA\Schema(type: 'integer')
+    )]
+    #[OA\RequestBody(
+        required: true,
+        content: new OA\JsonContent(
+            properties: [
+                new OA\Property(property: 'title', type: 'string', example: 'About Us'),
+                new OA\Property(property: 'content', type: 'string', example: '<p>This is the updated about us page content.</p>'),
+                new OA\Property(property: 'status', type: 'string', enum: ['draft', 'published'], example: 'published'),
+                new OA\Property(property: 'published_at', type: 'string', format: 'date-time', nullable: true),
+                new OA\Property(property: 'parent_id', type: 'integer', nullable: true),
+                new OA\Property(property: 'order', type: 'integer', example: 1, nullable: true)
+            ]
+        )
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Page updated successfully',
+        content: new OA\JsonContent(
+            properties: [
+                new OA\Property(property: 'status', type: 'string', example: 'success'),
+                new OA\Property(property: 'message', type: 'string', example: 'Page updated successfully'),
+                new OA\Property(property: 'data', type: 'object')
+            ]
+        )
+    )]
+    #[OA\Response(
+        response: 422,
+        description: 'Validation error',
+        content: new OA\JsonContent(
+            properties: [
+                new OA\Property(property: 'status', type: 'string', example: 'error'),
+                new OA\Property(property: 'message', type: 'string', example: 'Page cannot be its own parent')
+            ]
+        )
+    )]
+    #[OA\Response(
+        response: 404,
+        description: 'Page not found'
+    )]
     public function update(Request $request, $id): JsonResponse
     {
         $page = Page::findOrFail($id);
@@ -212,6 +378,43 @@ class PageController extends Controller
      * @param int $id
      * @return JsonResponse
      */
+    #[OA\Delete(
+        path: '/api/v1/content/pages/{id}',
+        summary: 'Delete a page',
+        description: 'Deletes a page',
+        security: [['bearerAuth' => []]]
+    )]
+    #[OA\Parameter(
+        name: 'id',
+        in: 'path',
+        required: true,
+        description: 'The page ID',
+        schema: new OA\Schema(type: 'integer')
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Page deleted successfully',
+        content: new OA\JsonContent(
+            properties: [
+                new OA\Property(property: 'status', type: 'string', example: 'success'),
+                new OA\Property(property: 'message', type: 'string', example: 'Page deleted successfully')
+            ]
+        )
+    )]
+    #[OA\Response(
+        response: 422,
+        description: 'Cannot delete page with children',
+        content: new OA\JsonContent(
+            properties: [
+                new OA\Property(property: 'status', type: 'string', example: 'error'),
+                new OA\Property(property: 'message', type: 'string', example: 'Cannot delete page with child pages')
+            ]
+        )
+    )]
+    #[OA\Response(
+        response: 404,
+        description: 'Page not found'
+    )]
     public function destroy($id): JsonResponse
     {
         $page = Page::findOrFail($id);
@@ -251,6 +454,33 @@ class PageController extends Controller
      * @param string $slug
      * @return JsonResponse
      */
+    #[OA\Get(
+        path: '/api/v1/content/pages/slug/{slug}',
+        summary: 'Get a page by slug',
+        description: 'Returns a specific page by its slug',
+        security: [['bearerAuth' => []]]
+    )]
+    #[OA\Parameter(
+        name: 'slug',
+        in: 'path',
+        required: true,
+        description: 'The page slug',
+        schema: new OA\Schema(type: 'string')
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Page details',
+        content: new OA\JsonContent(
+            properties: [
+                new OA\Property(property: 'status', type: 'string', example: 'success'),
+                new OA\Property(property: 'data', type: 'object')
+            ]
+        )
+    )]
+    #[OA\Response(
+        response: 404,
+        description: 'Page not found'
+    )]
     public function bySlug($slug): JsonResponse
     {
         $page = Page::where('slug', $slug)
