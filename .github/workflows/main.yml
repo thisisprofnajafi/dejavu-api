@@ -39,20 +39,6 @@ jobs:
           password: Prof48017421@#
           server-dir: /
           
-      - name: Run Composer Update on Server
-        uses: appleboy/ssh-action@master
-        with:
-          host: ftp.abolfazlnajafi.com
-          username: dejavu-api@abolfazlnajafi.com
-          password: Prof48017421@#
-          port: 2222
-          script: |
-            cd /
-            composer update --no-interaction
-            composer dump-autoload
-            php artisan optimize:clear
-            php artisan migrate --force
-            php artisan db:seed --force
           
       - name: Notify Telegram
         env:

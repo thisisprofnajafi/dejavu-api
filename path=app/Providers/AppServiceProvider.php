@@ -7,25 +7,25 @@ use Illuminate\Support\ServiceProvider;
 class AppServiceProvider extends ServiceProvider
 {
     /**
-     * Register any application services.
+     * Register services.
+     *
+     * @return void
      */
-    public function register(): void
-    {
-        // Register module route service providers
-        $this->registerModuleRouteProviders();
-    }
-
-    /**
-     * Bootstrap any application services.
-     */
-    public function boot(): void
+    public function register()
     {
         //
     }
-    
+
     /**
-     * Register route service providers from each module
+     * Bootstrap services.
+     *
+     * @return void
      */
+    public function boot()
+    {
+        $this->registerModuleRouteProviders();
+    }
+
     protected function registerModuleRouteProviders(): void
     {
         // Get all modules from the Modules directory
@@ -37,12 +37,13 @@ class AppServiceProvider extends ServiceProvider
         $modules = array_diff(scandir($modulesPath), ['.', '..']);
         
         foreach ($modules as $module) {
-            // Only process directories, not files like README.md
-            if (!is_dir($modulesPath . '/' . $module)) {
+            // Skip anything that's not a directory (e.g. README.md)
+            $modulePath = $modulesPath . '/' . $module;
+            if (!is_dir($modulePath)) {
                 continue;
             }
             
-            $routeProviderPath = $modulesPath . '/' . $module . '/app/Providers/RouteServiceProvider.php';
+            $routeProviderPath = $modulePath . '/app/Providers/RouteServiceProvider.php';
             
             if (file_exists($routeProviderPath)) {
                 $providerClass = "Modules\\{$module}\\app\\Providers\\RouteServiceProvider";
@@ -52,4 +53,4 @@ class AppServiceProvider extends ServiceProvider
             }
         }
     }
-}
+} 
