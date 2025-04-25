@@ -15,9 +15,9 @@ class DatabaseSeeder extends Seeder
         $this->call([
             \Modules\Role\Database\Seeders\RoleDatabaseSeeder::class,
             \Database\Seeders\UserSeeder::class,
-            \Database\Seeders\CategorySeeder::class,
-            \Database\Seeders\SupportSeeder::class,
-            \Database\Seeders\ContentSeeder::class,
+            // \Database\Seeders\CategorySeeder::class,
+            // \Database\Seeders\SupportSeeder::class,
+            // \Database\Seeders\ContentSeeder::class,
         ]);
     }
 }

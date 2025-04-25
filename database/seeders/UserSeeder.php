@@ -17,59 +17,71 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         // Create Admin user
-        $admin = User::create([
-            'name' => 'Admin User',
-            'email' => 'admin@example.com',
-            'password' => Hash::make('Admin@123'),
-            'email_verified_at' => now(),
-            'remember_token' => \Illuminate\Support\Str::random(10),
-        ]);
+        $admin = User::firstOrCreate(
+            ['email' => 'admin@example.com'],
+            [
+                'name' => 'Admin User',
+                'password' => Hash::make('Admin@123'),
+                'email_verified_at' => now(),
+                'remember_token' => \Illuminate\Support\Str::random(10),
+            ]
+        );
         $admin->assignRole('admin');
         
-        // Create statistics for admin
-        UserStatistic::create([
-            'user_id' => $admin->id,
-            'login_count' => 1,
-            'last_login_at' => now(),
-        ]);
+        // Create statistics for admin if not exists
+        UserStatistic::firstOrCreate(
+            ['user_id' => $admin->id],
+            [
+                'login_count' => 1,
+                'last_login_at' => now(),
+            ]
+        );
 
         // Create Author user
-        $author = User::create([
-            'name' => 'Author User',
-            'email' => 'author@example.com',
-            'password' => Hash::make('Author@123'),
-            'email_verified_at' => now(),
-            'remember_token' => \Illuminate\Support\Str::random(10),
-        ]);
+        $author = User::firstOrCreate(
+            ['email' => 'author@example.com'],
+            [
+                'name' => 'Author User',
+                'password' => Hash::make('Author@123'),
+                'email_verified_at' => now(),
+                'remember_token' => \Illuminate\Support\Str::random(10),
+            ]
+        );
         $author->assignRole('author');
         
-        // Create author profile
-        Author::create([
-            'user_id' => $author->id,
-            'bio' => 'Professional content creator with expertise in digital marketing and SEO optimization.',
-            'website' => 'https://author-example.com',
-            'social_media' => json_encode([
-                'twitter' => 'https://twitter.com/authorexample',
-                'linkedin' => 'https://linkedin.com/in/authorexample',
-            ]),
-            'status' => 'active',
-        ]);
+        // Create author profile if not exists
+        Author::firstOrCreate(
+            ['user_id' => $author->id],
+            [
+                'bio' => 'Professional content creator with expertise in digital marketing and SEO optimization.',
+                'website' => 'https://author-example.com',
+                'social_media' => json_encode([
+                    'twitter' => 'https://twitter.com/authorexample',
+                    'linkedin' => 'https://linkedin.com/in/authorexample',
+                ]),
+                'status' => 'active',
+            ]
+        );
         
-        // Create statistics for author
-        UserStatistic::create([
-            'user_id' => $author->id,
-            'login_count' => 1,
-            'last_login_at' => now(),
-        ]);
+        // Create statistics for author if not exists
+        UserStatistic::firstOrCreate(
+            ['user_id' => $author->id],
+            [
+                'login_count' => 1,
+                'last_login_at' => now(),
+            ]
+        );
 
         // Create Visitor user
-        $visitor = User::create([
-            'name' => 'Visitor User',
-            'email' => 'visitor@example.com',
-            'password' => Hash::make('Visitor@123'),
-            'email_verified_at' => now(),
-            'remember_token' => \Illuminate\Support\Str::random(10),
-        ]);
+        $visitor = User::firstOrCreate(
+            ['email' => 'visitor@example.com'],
+            [
+                'name' => 'Visitor User',
+                'password' => Hash::make('Visitor@123'),
+                'email_verified_at' => now(),
+                'remember_token' => \Illuminate\Support\Str::random(10),
+            ]
+        );
         $visitor->assignRole('visitor');
         
         // Create visitor profile
@@ -95,21 +107,25 @@ class UserSeeder extends Seeder
         
         // Create additional users with 'user' role for testing
         for ($i = 1; $i <= 5; $i++) {
-            $user = User::create([
-                'name' => "Test User {$i}",
-                'email' => "user{$i}@example.com",
-                'password' => Hash::make('Password@123'),
-                'email_verified_at' => now(),
-                'remember_token' => \Illuminate\Support\Str::random(10),
-            ]);
+            $user = User::firstOrCreate(
+                ['email' => "user{$i}@example.com"],
+                [
+                    'name' => "Test User {$i}",
+                    'password' => Hash::make('Password@123'),
+                    'email_verified_at' => now(),
+                    'remember_token' => \Illuminate\Support\Str::random(10),
+                ]
+            );
             $user->assignRole('user');
             
-            // Create statistics for test users
-            UserStatistic::create([
-                'user_id' => $user->id,
-                'login_count' => rand(1, 10),
-                'last_login_at' => now()->subDays(rand(1, 30)),
-            ]);
+            // Create statistics for test users if not exists
+            UserStatistic::firstOrCreate(
+                ['user_id' => $user->id],
+                [
+                    'login_count' => rand(1, 10),
+                    'last_login_at' => now()->subDays(rand(1, 30)),
+                ]
+            );
         }
     }
 } 

@@ -47,7 +47,7 @@ class SupportSeeder extends Seeder
         ];
 
         foreach ($departments as $department) {
-            Department::create($department);
+            Department::firstOrCreate(['name' => $department['name']], $department);
         }
 
         // Assign admin to all departments
@@ -55,11 +55,10 @@ class SupportSeeder extends Seeder
         $allDepartments = Department::all();
         
         foreach ($allDepartments as $department) {
-            DepartmentUser::create([
-                'department_id' => $department->id,
-                'user_id' => $admin->id,
-                'is_manager' => true,
-            ]);
+            DepartmentUser::firstOrCreate(
+                ['department_id' => $department->id, 'user_id' => $admin->id],
+                ['is_manager' => true]
+            );
         }
 
         // Create FAQ categories
@@ -91,7 +90,7 @@ class SupportSeeder extends Seeder
         ];
 
         foreach ($faqCategories as $category) {
-            FaqCategory::create($category);
+            FaqCategory::firstOrCreate(['name' => $category['name']], $category);
         }
 
         // Create FAQs
@@ -155,7 +154,7 @@ class SupportSeeder extends Seeder
         ];
 
         foreach ($faqs as $faq) {
-            Faq::create($faq);
+            Faq::firstOrCreate(['question' => $faq['question']], $faq);
         }
 
         // Create sample tickets

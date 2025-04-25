@@ -3,9 +3,9 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Modules\Content\Models\Post;
-use Modules\Content\Models\Tag;
-use Modules\Content\Models\Category;
+use Modules\Content\app\Models\Post;
+use Modules\Content\app\Models\Tag;
+use Modules\Content\app\Models\Category;
 use App\Models\User;
 
 class ContentSeeder extends Seeder
@@ -40,7 +40,7 @@ class ContentSeeder extends Seeder
         ];
 
         foreach ($tags as $tag) {
-            Tag::create($tag);
+            Tag::firstOrCreate(['slug' => $tag['slug']], $tag);
         }
 
         // Get sample data for posts
