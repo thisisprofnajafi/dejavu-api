@@ -5,7 +5,7 @@
     "keywords": ["auth", "sanctum", "authentication"],
     "priority": 1,
     "providers": [
-        "Modules\\Auth\\Providers\\AuthServiceProvider"
+        "Modules\\Auth\\Providers\\ModuleServiceProvider"
     ],
     "files": []
 }
