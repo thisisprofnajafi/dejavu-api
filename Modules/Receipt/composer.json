@@ -1,0 +1,22 @@
+{
+    "name": "nwidart/receipt",
+    "description": "Receipt management module for DejaVu API",
+    "authors": [
+        {
+            "name": "DejaVu Team",
+            "email": "admin@dejavu.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {}
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Receipt\\": ""
+        }
+    },
+    "require": {}
+} 

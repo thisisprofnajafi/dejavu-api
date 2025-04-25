@@ -1,0 +1,13 @@
+{
+    "name": "Receipt",
+    "alias": "receipt",
+    "description": "Receipt management module for DejaVu API",
+    "keywords": ["receipt", "transaction", "payment", "visitor"],
+    "priority": 0,
+    "providers": [
+        "Modules\\Receipt\\app\\Providers\\ReceiptServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": ["Visitor"]
+} 

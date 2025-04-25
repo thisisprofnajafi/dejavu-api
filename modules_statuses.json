@@ -4,5 +4,8 @@
     "Role": true,
     "Admin": true,
     "Author": true,
-    "Visitor": true
+    "Visitor": true,
+    "Support": true,
+    "Content": true,
+    "Receipt": true
 }
