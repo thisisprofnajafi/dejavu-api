@@ -25,106 +25,106 @@ class RoleDatabaseSeeder extends Seeder
     {
         // Permissions for users
         $userPermissions = [
-            'view users',
-            'create users',
-            'edit users',
-            'delete users',
+            'مشاهده کاربران',
+            'ایجاد کاربران',
+            'ویرایش کاربران',
+            'حذف کاربران',
         ];
 
         // Permissions for roles
         $rolePermissions = [
-            'view roles',
-            'create roles',
-            'edit roles',
-            'delete roles',
+            'مشاهده نقش‌ها',
+            'ایجاد نقش‌ها',
+            'ویرایش نقش‌ها',
+            'حذف نقش‌ها',
         ];
 
         // Permissions for permissions
         $permissionPermissions = [
-            'view permissions',
-            'create permissions',
-            'edit permissions',
-            'delete permissions',
+            'مشاهده دسترسی‌ها',
+            'ایجاد دسترسی‌ها',
+            'ویرایش دسترسی‌ها',
+            'حذف دسترسی‌ها',
         ];
 
         // Permissions for categories
         $categoryPermissions = [
-            'view categories',
-            'create categories',
-            'edit categories',
-            'delete categories',
+            'مشاهده دسته‌بندی‌ها',
+            'ایجاد دسته‌بندی‌ها',
+            'ویرایش دسته‌بندی‌ها',
+            'حذف دسته‌بندی‌ها',
         ];
 
         // Permissions for posts
         $postPermissions = [
-            'view posts',
-            'create posts',
-            'edit posts',
-            'delete posts',
+            'مشاهده پست‌ها',
+            'ایجاد پست‌ها',
+            'ویرایش پست‌ها',
+            'حذف پست‌ها',
         ];
 
         // Permissions for stores
         $storePermissions = [
-            'view stores',
-            'create stores',
-            'edit stores',
-            'delete stores',
+            'مشاهده فروشگاه‌ها',
+            'ایجاد فروشگاه‌ها',
+            'ویرایش فروشگاه‌ها',
+            'حذف فروشگاه‌ها',
         ];
 
         // Permissions for resumes
         $resumePermissions = [
-            'view resumes',
-            'create resumes',
-            'edit resumes',
-            'delete resumes',
+            'مشاهده رزومه‌ها',
+            'ایجاد رزومه‌ها',
+            'ویرایش رزومه‌ها',
+            'حذف رزومه‌ها',
         ];
 
         // Permissions for plans
         $planPermissions = [
-            'view plans',
-            'create plans',
-            'edit plans',
-            'delete plans',
+            'مشاهده طرح‌ها',
+            'ایجاد طرح‌ها',
+            'ویرایش طرح‌ها',
+            'حذف طرح‌ها',
         ];
 
         // Permissions for faq
         $faqPermissions = [
-            'view faqs',
-            'create faqs',
-            'edit faqs',
-            'delete faqs',
+            'مشاهده سوالات متداول',
+            'ایجاد سوالات متداول',
+            'ویرایش سوالات متداول',
+            'حذف سوالات متداول',
         ];
 
         // Permissions for tickets
         $ticketPermissions = [
-            'view tickets',
-            'create tickets',
-            'edit tickets',
-            'delete tickets',
-            'respond to tickets',
+            'مشاهده تیکت‌ها',
+            'ایجاد تیکت‌ها',
+            'ویرایش تیکت‌ها',
+            'حذف تیکت‌ها',
+            'پاسخ به تیکت‌ها',
         ];
 
         // Permissions for customers
         $customerPermissions = [
-            'view customers',
-            'create customers',
-            'edit customers',
-            'delete customers',
+            'مشاهده مشتریان',
+            'ایجاد مشتریان',
+            'ویرایش مشتریان',
+            'حذف مشتریان',
         ];
 
         // Permissions for wallet
         $walletPermissions = [
-            'view wallets',
-            'create wallet transactions',
-            'manage wallet',
+            'مشاهده کیف‌پول‌ها',
+            'ایجاد تراکنش‌های کیف‌پول',
+            'مدیریت کیف‌پول',
         ];
 
         // Permissions for receipts
         $receiptPermissions = [
-            'view receipts',
-            'create receipts',
-            'edit receipts',
-            'delete receipts',
+            'مشاهده رسیدها',
+            'ایجاد رسیدها',
+            'ویرایش رسیدها',
+            'حذف رسیدها',
         ];
 
         // Merge all permissions
@@ -175,32 +175,32 @@ class RoleDatabaseSeeder extends Seeder
         // Author role - gets specific permissions
         $authorRole = Role::where('name', 'author')->first();
         $authorPermissions = Permission::whereIn('name', [
-            'view categories', 'create categories', 'edit categories', 'delete categories',
-            'view posts', 'create posts', 'edit posts', 'delete posts',
-            'view tickets', 'create tickets',
+            'مشاهده دسته‌بندی‌ها', 'ایجاد دسته‌بندی‌ها', 'ویرایش دسته‌بندی‌ها', 'حذف دسته‌بندی‌ها',
+            'مشاهده پست‌ها', 'ایجاد پست‌ها', 'ویرایش پست‌ها', 'حذف پست‌ها',
+            'مشاهده تیکت‌ها', 'ایجاد تیکت‌ها',
         ])->get();
         $authorRole->syncPermissions($authorPermissions);
 
         // Visitor role - gets specific permissions
         $visitorRole = Role::where('name', 'visitor')->first();
         $visitorPermissions = Permission::whereIn('name', [
-            'view wallets', 'create wallet transactions', 'manage wallet',
-            'view receipts', 'create receipts',
-            'view customers',
+            'مشاهده کیف‌پول‌ها', 'ایجاد تراکنش‌های کیف‌پول', 'مدیریت کیف‌پول',
+            'مشاهده رسیدها', 'ایجاد رسیدها',
+            'مشاهده مشتریان',
         ])->get();
         $visitorRole->syncPermissions($visitorPermissions);
 
         // User role - gets specific permissions
         $userRole = Role::where('name', 'user')->first();
         $userPermissions = Permission::whereIn('name', [
-            'view tickets', 'create tickets',
+            'مشاهده تیکت‌ها', 'ایجاد تیکت‌ها',
         ])->get();
         $userRole->syncPermissions($userPermissions);
 
         // Customer role - gets specific permissions
         $customerRole = Role::where('name', 'customer')->first();
         $customerPermissions = Permission::whereIn('name', [
-            'view tickets', 'create tickets',
+            'مشاهده تیکت‌ها', 'ایجاد تیکت‌ها',
         ])->get();
         $customerRole->syncPermissions($customerPermissions);
     }

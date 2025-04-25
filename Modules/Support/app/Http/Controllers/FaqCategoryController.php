@@ -55,13 +55,13 @@ class FaqCategoryController extends Controller
             
             return response()->json([
                 'success' => true,
-                'message' => 'FAQ category created successfully',
+                'message' => 'دسته‌بندی سوالات متداول با موفقیت ایجاد شد',
                 'data' => $category
             ], Response::HTTP_CREATED);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to create FAQ category: ' . $e->getMessage()
+                'message' => 'خطا در ایجاد دسته‌بندی سوالات متداول: ' . $e->getMessage()
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -84,7 +84,7 @@ class FaqCategoryController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'FAQ category not found'
+                'message' => 'دسته‌بندی سوالات متداول یافت نشد'
             ], Response::HTTP_NOT_FOUND);
         }
     }
@@ -103,13 +103,13 @@ class FaqCategoryController extends Controller
             
             return response()->json([
                 'success' => true,
-                'message' => 'FAQ category updated successfully',
+                'message' => 'دسته‌بندی سوالات متداول با موفقیت به‌روزرسانی شد',
                 'data' => $category
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to update FAQ category: ' . $e->getMessage()
+                'message' => 'خطا در به‌روزرسانی دسته‌بندی سوالات متداول: ' . $e->getMessage()
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -127,12 +127,12 @@ class FaqCategoryController extends Controller
             
             return response()->json([
                 'success' => true,
-                'message' => 'FAQ category deleted successfully'
+                'message' => 'دسته‌بندی سوالات متداول با موفقیت حذف شد'
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to delete FAQ category: ' . $e->getMessage()
+                'message' => 'خطا در حذف دسته‌بندی سوالات متداول: ' . $e->getMessage()
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -156,12 +156,12 @@ class FaqCategoryController extends Controller
             
             return response()->json([
                 'success' => true,
-                'message' => 'FAQ categories reordered successfully'
+                'message' => 'ترتیب دسته‌بندی‌های سوالات متداول با موفقیت تغییر کرد'
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to reorder FAQ categories: ' . $e->getMessage()
+                'message' => 'خطا در تغییر ترتیب دسته‌بندی‌های سوالات متداول: ' . $e->getMessage()
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }

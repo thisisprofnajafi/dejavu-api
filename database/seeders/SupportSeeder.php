@@ -21,26 +21,26 @@ class SupportSeeder extends Seeder
         // Create support departments
         $departments = [
             [
-                'name' => 'Technical Support',
-                'description' => 'Help with technical issues and platform functionality',
+                'name' => 'پشتیبانی فنی',
+                'description' => 'کمک با مشکلات فنی و عملکرد پلتفرم',
                 'email' => 'tech@example.com',
                 'status' => 'active',
             ],
             [
-                'name' => 'Billing',
-                'description' => 'Help with payment, subscription and billing issues',
+                'name' => 'صورتحساب',
+                'description' => 'کمک با پرداخت، اشتراک و مسائل صورتحساب',
                 'email' => 'billing@example.com',
                 'status' => 'active',
             ],
             [
-                'name' => 'Content',
-                'description' => 'Assistance with content creation and publishing',
+                'name' => 'محتوا',
+                'description' => 'کمک با ایجاد و مدیریت محتوا',
                 'email' => 'content@example.com',
                 'status' => 'active',
             ],
             [
-                'name' => 'General Inquiries',
-                'description' => 'General questions and information',
+                'name' => 'سوالات عمومی',
+                'description' => 'سوالات عمومی و اطلاعات',
                 'email' => 'info@example.com',
                 'status' => 'active',
             ],
@@ -64,26 +64,26 @@ class SupportSeeder extends Seeder
         // Create FAQ categories
         $faqCategories = [
             [
-                'name' => 'Account & Security',
-                'description' => 'Questions about account management and security',
+                'name' => 'حساب کاربری و امنیت',
+                'description' => 'سؤالات مربوط به مدیریت حساب کاربری و امنیت',
                 'order' => 1,
                 'status' => 'active',
             ],
             [
-                'name' => 'Billing & Payments',
-                'description' => 'Questions about billing, payments and subscriptions',
+                'name' => 'صورتحساب و پرداخت‌ها',
+                'description' => 'سؤالات مربوط به صورتحساب، پرداخت‌ها و اشتراک‌ها',
                 'order' => 2,
                 'status' => 'active',
             ],
             [
-                'name' => 'Content Management',
-                'description' => 'Questions about creating and managing content',
+                'name' => 'مدیریت محتوا',
+                'description' => 'سؤالات مربوط به ایجاد و مدیریت محتوا',
                 'order' => 3,
                 'status' => 'active',
             ],
             [
-                'name' => 'Platform Features',
-                'description' => 'Questions about platform features and functionality',
+                'name' => 'ویژگی‌های پلتفرم',
+                'description' => 'سؤالات مربوط به ویژگی‌ها و عملکرد پلتفرم',
                 'order' => 4,
                 'status' => 'active',
             ],
@@ -96,57 +96,57 @@ class SupportSeeder extends Seeder
         // Create FAQs
         $faqs = [
             [
-                'question' => 'How do I reset my password?',
-                'answer' => 'To reset your password, click on the "Forgot Password" link on the login page. Enter your email address and follow the instructions sent to your email.',
+                'question' => 'چگونه رمز عبور خود را بازنشانی کنم؟',
+                'answer' => 'برای بازنشانی رمز عبور، روی لینک «فراموشی رمز عبور» در صفحه ورود کلیک کنید. ایمیل خود را وارد کنید و دستورالعمل‌های ارسال شده به ایمیل خود را دنبال کنید.',
                 'faq_category_id' => 1, // Account & Security
                 'order' => 1,
                 'status' => 'active',
             ],
             [
-                'question' => 'How can I change my email address?',
-                'answer' => 'You can change your email address in your account settings. Go to "My Account" > "Profile" and update your email address.',
+                'question' => 'چگونه می‌توانم آدرس ایمیل خود را تغییر دهم؟',
+                'answer' => 'شما می‌توانید آدرس ایمیل خود را در تنظیمات حساب کاربری تغییر دهید. به «حساب من» > «نمایه» بروید و آدرس ایمیل خود را به‌روز کنید.',
                 'faq_category_id' => 1, // Account & Security
                 'order' => 2,
                 'status' => 'active',
             ],
             [
-                'question' => 'What payment methods do you accept?',
-                'answer' => 'We accept credit/debit cards (Visa, MasterCard, American Express), PayPal, and bank transfers for certain plans.',
+                'question' => 'چه روش‌های پرداختی را می‌پذیرید؟',
+                'answer' => 'ما کارت‌های اعتباری/بدهی (ویزا، مسترکارت، امریکن اکسپرس)، پی‌پال و انتقال بانکی برای برخی از طرح‌ها را می‌پذیریم.',
                 'faq_category_id' => 2, // Billing & Payments
                 'order' => 1,
                 'status' => 'active',
             ],
             [
-                'question' => 'How do I cancel my subscription?',
-                'answer' => 'To cancel your subscription, go to "My Account" > "Billing" and click on "Cancel Subscription". Follow the prompts to complete the cancellation.',
+                'question' => 'چگونه اشتراک خود را لغو کنم؟',
+                'answer' => 'برای لغو اشتراک خود، به «حساب من» > «صورتحساب» بروید و روی «لغو اشتراک» کلیک کنید. دستورالعمل‌ها را برای تکمیل لغو دنبال کنید.',
                 'faq_category_id' => 2, // Billing & Payments
                 'order' => 2,
                 'status' => 'active',
             ],
             [
-                'question' => 'How do I create a new post?',
-                'answer' => 'To create a new post, go to "Content" > "Posts" and click on "Create New Post". Fill in the required fields and click "Publish" when ready.',
+                'question' => 'چگونه یک پست جدید ایجاد کنم؟',
+                'answer' => 'برای ایجاد یک پست جدید، به «محتوا» > «پست‌ها» بروید و روی «ایجاد پست جدید» کلیک کنید. فیلدهای مورد نیاز را پر کنید و هنگامی که آماده شد روی «انتشار» کلیک کنید.',
                 'faq_category_id' => 3, // Content Management
                 'order' => 1,
                 'status' => 'active',
             ],
             [
-                'question' => 'Can I schedule posts for future publication?',
-                'answer' => 'Yes, you can schedule posts for future publication. When creating or editing a post, set the publication date and time in the "Schedule" section.',
+                'question' => 'آیا می‌توانم پست‌ها را برای انتشار در آینده زمان‌بندی کنم؟',
+                'answer' => 'بله، می‌توانید پست‌ها را برای انتشار در آینده زمان‌بندی کنید. هنگام ایجاد یا ویرایش یک پست، تاریخ و زمان انتشار را در بخش «زمان‌بندی» تنظیم کنید.',
                 'faq_category_id' => 3, // Content Management
                 'order' => 2,
                 'status' => 'active',
             ],
             [
-                'question' => 'How do I earn commission as a visitor?',
-                'answer' => 'As a visitor, you earn commission when people visit content through your referral links. Your unique referral code is available in your dashboard.',
+                'question' => 'چگونه به عنوان بازدیدکننده کمیسیون کسب کنم؟',
+                'answer' => 'به عنوان بازدیدکننده، زمانی که افراد از طریق لینک‌های ارجاع شما از محتوا بازدید می‌کنند، کمیسیون کسب می‌کنید. کد ارجاع منحصر به فرد شما در داشبورد شما موجود است.',
                 'faq_category_id' => 4, // Platform Features
                 'order' => 1,
                 'status' => 'active',
             ],
             [
-                'question' => 'What analytics are available for my content?',
-                'answer' => 'We provide comprehensive analytics including page views, unique visitors, engagement metrics, and conversion rates. Access these through your dashboard.',
+                'question' => 'چه تحلیل‌هایی برای محتوای من در دسترس است؟',
+                'answer' => 'ما تحلیل‌های جامعی شامل بازدیدهای صفحه، بازدیدکنندگان منحصر به فرد، معیارهای مشارکت و نرخ‌های تبدیل ارائه می‌دهیم. به این موارد از طریق داشبورد خود دسترسی پیدا کنید.',
                 'faq_category_id' => 4, // Platform Features
                 'order' => 2,
                 'status' => 'active',
@@ -170,7 +170,7 @@ class SupportSeeder extends Seeder
             $priority = $priorities[array_rand($priorities)];
             
             $ticket = Ticket::create([
-                'subject' => "Sample Ticket #{$i}: " . fake()->sentence(),
+                'subject' => "تیکت نمونه #{$i}: " . fake()->sentence(),
                 'content' => fake()->paragraphs(3, true),
                 'user_id' => $user->id,
                 'department_id' => $department->id,
@@ -185,7 +185,7 @@ class SupportSeeder extends Seeder
                 TicketResponse::create([
                     'ticket_id' => $ticket->id,
                     'user_id' => $admin->id, // Admin responds
-                    'content' => "Thank you for your inquiry. " . fake()->paragraph(),
+                    'content' => "با تشکر از استعلام شما. " . fake()->paragraph(),
                     'is_private' => false,
                     'created_at' => $ticket->created_at->addHours(rand(1, 24)),
                 ]);

@@ -20,7 +20,7 @@ class UserSeeder extends Seeder
         $admin = User::firstOrCreate(
             ['email' => 'admin@example.com'],
             [
-                'name' => 'Admin User',
+                'name' => 'کاربر مدیر',
                 'password' => Hash::make('Admin@123'),
                 'email_verified_at' => now(),
                 'remember_token' => \Illuminate\Support\Str::random(10),
@@ -41,7 +41,7 @@ class UserSeeder extends Seeder
         $author = User::firstOrCreate(
             ['email' => 'author@example.com'],
             [
-                'name' => 'Author User',
+                'name' => 'کاربر نویسنده',
                 'password' => Hash::make('Author@123'),
                 'email_verified_at' => now(),
                 'remember_token' => \Illuminate\Support\Str::random(10),
@@ -53,7 +53,7 @@ class UserSeeder extends Seeder
         Author::firstOrCreate(
             ['user_id' => $author->id],
             [
-                'bio' => 'Professional content creator with expertise in digital marketing and SEO optimization.',
+                'bio' => 'تولید کننده محتوای حرفه‌ای با تخصص در بازاریابی دیجیتال و بهینه‌سازی سئو.',
                 'website' => 'https://author-example.com',
                 'social_media' => json_encode([
                     'twitter' => 'https://twitter.com/authorexample',
@@ -76,7 +76,7 @@ class UserSeeder extends Seeder
         $visitor = User::firstOrCreate(
             ['email' => 'visitor@example.com'],
             [
-                'name' => 'Visitor User',
+                'name' => 'کاربر بازدیدکننده',
                 'password' => Hash::make('Visitor@123'),
                 'email_verified_at' => now(),
                 'remember_token' => \Illuminate\Support\Str::random(10),
@@ -110,7 +110,7 @@ class UserSeeder extends Seeder
             $user = User::firstOrCreate(
                 ['email' => "user{$i}@example.com"],
                 [
-                    'name' => "Test User {$i}",
+                    'name' => "کاربر آزمایشی {$i}",
                     'password' => Hash::make('Password@123'),
                     'email_verified_at' => now(),
                     'remember_token' => \Illuminate\Support\Str::random(10),

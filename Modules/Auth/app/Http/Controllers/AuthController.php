@@ -139,7 +139,7 @@ class AuthController extends Controller
         if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json([
                 'success' => false,
-                'message' => 'Invalid login credentials'
+                'message' => 'اطلاعات ورود نامعتبر است'
             ], 401);
         }
 
@@ -184,7 +184,7 @@ class AuthController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Logged out successfully'
+            'message' => 'با موفقیت خارج شدید'
         ]);
     }
 

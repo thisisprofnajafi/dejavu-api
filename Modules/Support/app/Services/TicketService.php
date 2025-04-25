@@ -220,7 +220,7 @@ class TicketService
         
         // Check if user is authorized to respond to the ticket
         if (!$isAdmin && $ticket->user_id !== $userId) {
-            throw new \Exception('You are not authorized to respond to this ticket');
+            throw new \Exception('شما مجاز به پاسخ دادن به این تیکت نیستید');
         }
         
         DB::beginTransaction();

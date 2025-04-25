@@ -70,13 +70,13 @@ class TicketController extends Controller
             
             return response()->json([
                 'success' => true,
-                'message' => 'Ticket created successfully',
+                'message' => 'تیکت با موفقیت ایجاد شد',
                 'data' => $ticket
             ], Response::HTTP_CREATED);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to create ticket: ' . $e->getMessage()
+                'message' => 'خطا در ایجاد تیکت: ' . $e->getMessage()
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -95,7 +95,7 @@ class TicketController extends Controller
         if (!Auth::user()->hasRole('admin') && $ticket->user_id !== Auth::id()) {
             return response()->json([
                 'success' => false,
-                'message' => 'You are not authorized to view this ticket'
+                'message' => 'شما مجاز به مشاهده این تیکت نیستید'
             ], Response::HTTP_FORBIDDEN);
         }
         
@@ -124,13 +124,13 @@ class TicketController extends Controller
             
             return response()->json([
                 'success' => true,
-                'message' => 'Ticket updated successfully',
+                'message' => 'تیکت با موفقیت به‌روزرسانی شد',
                 'data' => $ticket
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to update ticket: ' . $e->getMessage()
+                'message' => 'خطا در به‌روزرسانی تیکت: ' . $e->getMessage()
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -158,13 +158,13 @@ class TicketController extends Controller
             
             return response()->json([
                 'success' => true,
-                'message' => 'Ticket status updated successfully',
+                'message' => 'وضعیت تیکت با موفقیت به‌روزرسانی شد',
                 'data' => $ticket
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to update ticket status: ' . $e->getMessage()
+                'message' => 'خطا در به‌روزرسانی وضعیت تیکت: ' . $e->getMessage()
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -194,13 +194,13 @@ class TicketController extends Controller
             
             return response()->json([
                 'success' => true,
-                'message' => 'Response added successfully',
+                'message' => 'پاسخ با موفقیت اضافه شد',
                 'data' => $response
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to add response: ' . $e->getMessage()
+                'message' => 'خطا در افزودن پاسخ: ' . $e->getMessage()
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -221,7 +221,7 @@ class TicketController extends Controller
             if (!Auth::user()->hasRole('admin') && $ticket->user_id !== Auth::id()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'You are not authorized to download this attachment'
+                    'message' => 'شما مجاز به دانلود این پیوست نیستید'
                 ], Response::HTTP_FORBIDDEN);
             }
             
@@ -229,7 +229,7 @@ class TicketController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to download attachment: ' . $e->getMessage()
+                'message' => 'خطا در دانلود پیوست: ' . $e->getMessage()
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }

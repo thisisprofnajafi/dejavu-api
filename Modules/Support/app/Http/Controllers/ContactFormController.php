@@ -68,13 +68,13 @@ class ContactFormController extends Controller
             
             return response()->json([
                 'success' => true,
-                'message' => 'Contact form submitted successfully',
+                'message' => 'فرم تماس با موفقیت ارسال شد',
                 'data' => $submission
             ], Response::HTTP_CREATED);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to submit contact form: ' . $e->getMessage()
+                'message' => 'خطا در ارسال فرم تماس: ' . $e->getMessage()
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -97,7 +97,7 @@ class ContactFormController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Contact form submission not found'
+                'message' => 'ارسال فرم تماس یافت نشد'
             ], Response::HTTP_NOT_FOUND);
         }
     }
@@ -124,13 +124,13 @@ class ContactFormController extends Controller
             
             return response()->json([
                 'success' => true,
-                'message' => 'Contact form status updated successfully',
+                'message' => 'وضعیت فرم تماس با موفقیت به‌روزرسانی شد',
                 'data' => $submission
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to update contact form status: ' . $e->getMessage()
+                'message' => 'خطا در به‌روزرسانی وضعیت فرم تماس: ' . $e->getMessage()
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -148,12 +148,12 @@ class ContactFormController extends Controller
             
             return response()->json([
                 'success' => true,
-                'message' => 'Contact form submission deleted successfully'
+                'message' => 'ارسال فرم تماس با موفقیت حذف شد'
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to delete contact form submission: ' . $e->getMessage()
+                'message' => 'خطا در حذف ارسال فرم تماس: ' . $e->getMessage()
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -175,7 +175,7 @@ class ContactFormController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to get contact form statistics: ' . $e->getMessage()
+                'message' => 'خطا در دریافت آمار فرم تماس: ' . $e->getMessage()
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }

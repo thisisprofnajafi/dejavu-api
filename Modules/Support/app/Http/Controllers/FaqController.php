@@ -57,13 +57,13 @@ class FaqController extends Controller
             
             return response()->json([
                 'success' => true,
-                'message' => 'FAQ created successfully',
+                'message' => 'سوال متداول با موفقیت ایجاد شد',
                 'data' => $faq
             ], Response::HTTP_CREATED);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to create FAQ: ' . $e->getMessage()
+                'message' => 'خطا در ایجاد سوال متداول: ' . $e->getMessage()
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -86,7 +86,7 @@ class FaqController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'FAQ not found'
+                'message' => 'سوال متداول یافت نشد'
             ], Response::HTTP_NOT_FOUND);
         }
     }
@@ -105,13 +105,13 @@ class FaqController extends Controller
             
             return response()->json([
                 'success' => true,
-                'message' => 'FAQ updated successfully',
+                'message' => 'سوال متداول با موفقیت به‌روزرسانی شد',
                 'data' => $faq
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to update FAQ: ' . $e->getMessage()
+                'message' => 'خطا در به‌روزرسانی سوال متداول: ' . $e->getMessage()
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -129,12 +129,12 @@ class FaqController extends Controller
             
             return response()->json([
                 'success' => true,
-                'message' => 'FAQ deleted successfully'
+                'message' => 'سوال متداول با موفقیت حذف شد'
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to delete FAQ: ' . $e->getMessage()
+                'message' => 'خطا در حذف سوال متداول: ' . $e->getMessage()
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -157,7 +157,7 @@ class FaqController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to get FAQs: ' . $e->getMessage()
+                'message' => 'خطا در دریافت سوالات متداول: ' . $e->getMessage()
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -181,12 +181,12 @@ class FaqController extends Controller
             
             return response()->json([
                 'success' => true,
-                'message' => 'FAQs reordered successfully'
+                'message' => 'ترتیب سوالات متداول با موفقیت تغییر کرد'
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to reorder FAQs: ' . $e->getMessage()
+                'message' => 'خطا در تغییر ترتیب سوالات متداول: ' . $e->getMessage()
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }

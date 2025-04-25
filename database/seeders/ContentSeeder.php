@@ -17,26 +17,26 @@ class ContentSeeder extends Seeder
     {
         // Create tags
         $tags = [
-            ['name' => 'Laravel', 'slug' => 'laravel'],
-            ['name' => 'PHP', 'slug' => 'php'],
-            ['name' => 'JavaScript', 'slug' => 'javascript'],
-            ['name' => 'Vue.js', 'slug' => 'vuejs'],
-            ['name' => 'React', 'slug' => 'react'],
-            ['name' => 'HTML', 'slug' => 'html'],
-            ['name' => 'CSS', 'slug' => 'css'],
-            ['name' => 'API', 'slug' => 'api'],
-            ['name' => 'Database', 'slug' => 'database'],
-            ['name' => 'MySQL', 'slug' => 'mysql'],
-            ['name' => 'Security', 'slug' => 'security'],
-            ['name' => 'Performance', 'slug' => 'performance'],
-            ['name' => 'Mobile', 'slug' => 'mobile'],
-            ['name' => 'iOS', 'slug' => 'ios'],
-            ['name' => 'Android', 'slug' => 'android'],
-            ['name' => 'Career', 'slug' => 'career'],
-            ['name' => 'Productivity', 'slug' => 'productivity'],
-            ['name' => 'Marketing', 'slug' => 'marketing'],
-            ['name' => 'SEO', 'slug' => 'seo'],
-            ['name' => 'Analytics', 'slug' => 'analytics'],
+            ['name' => 'لاراول', 'slug' => 'laravel'],
+            ['name' => 'پی‌اچ‌پی', 'slug' => 'php'],
+            ['name' => 'جاوااسکریپت', 'slug' => 'javascript'],
+            ['name' => 'ویو جی‌اس', 'slug' => 'vuejs'],
+            ['name' => 'ری‌اکت', 'slug' => 'react'],
+            ['name' => 'اچ‌تی‌ام‌ال', 'slug' => 'html'],
+            ['name' => 'سی‌اس‌اس', 'slug' => 'css'],
+            ['name' => 'ای‌پی‌آی', 'slug' => 'api'],
+            ['name' => 'پایگاه داده', 'slug' => 'database'],
+            ['name' => 'مای‌اس‌کیو‌ال', 'slug' => 'mysql'],
+            ['name' => 'امنیت', 'slug' => 'security'],
+            ['name' => 'عملکرد', 'slug' => 'performance'],
+            ['name' => 'موبایل', 'slug' => 'mobile'],
+            ['name' => 'آی‌او‌اس', 'slug' => 'ios'],
+            ['name' => 'اندروید', 'slug' => 'android'],
+            ['name' => 'شغل', 'slug' => 'career'],
+            ['name' => 'بهره‌وری', 'slug' => 'productivity'],
+            ['name' => 'بازاریابی', 'slug' => 'marketing'],
+            ['name' => 'سئو', 'slug' => 'seo'],
+            ['name' => 'تجزیه و تحلیل', 'slug' => 'analytics'],
         ];
 
         foreach ($tags as $tag) {
@@ -58,7 +58,7 @@ class ContentSeeder extends Seeder
             $publishDate = $status === 'scheduled' ? now()->addDays(rand(1, 10)) : now()->subDays(rand(1, 30));
             
             $post = Post::create([
-                'title' => "Sample Post #{$i}: " . fake()->sentence(),
+                'title' => "پست نمونه #{$i}: " . fake()->sentence(),
                 'slug' => "sample-post-{$i}-" . fake()->slug(3),
                 'content' => $this->generateSampleContent(),
                 'excerpt' => fake()->paragraph(),
@@ -111,7 +111,7 @@ class ContentSeeder extends Seeder
                     // Add a code block
                     $content .= "```php\n";
                     $content .= "function example() {\n";
-                    $content .= "    return 'This is a sample code block';\n";
+                    $content .= "    return 'این یک بلوک کد نمونه است';\n";
                     $content .= "}\n";
                     $content .= "```\n\n";
                 }
