@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Schema;
 
 class DatabaseSeeder extends Seeder
 {
@@ -11,13 +12,27 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Run module seeders in correct order
-        $this->call([
-            \Modules\Role\Database\Seeders\RoleDatabaseSeeder::class,
-            \Database\Seeders\UserSeeder::class,
-            // \Database\Seeders\CategorySeeder::class,
-            // \Database\Seeders\SupportSeeder::class,
-            // \Database\Seeders\ContentSeeder::class,
-        ]);
+        $this->command->info('Starting database seeding...');
+
+        // Define seeders to run in order of dependency
+        $seeders = [
+            UserSeeder::class,
+            // \Modules\Role\Database\Seeders\RoleDatabaseSeeder::class,
+            // CategorySeeder::class,
+            // SupportSeeder::class,
+            // ContentSeeder::class,
+        ];
+
+        // Run each seeder with error handling
+        foreach ($seeders as $seeder) {
+            try {
+                $this->command->info("Running $seeder...");
+                $this->call($seeder);
+            } catch (\Exception $e) {
+                $this->command->error("Error running $seeder: " . $e->getMessage());
+            }
+        }
+
+        $this->command->info('Database seeding completed successfully!');
     }
 }

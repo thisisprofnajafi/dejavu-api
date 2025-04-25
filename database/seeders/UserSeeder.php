@@ -3,8 +3,9 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Schema;
 use Modules\User\Models\UserStatistic;
 use Modules\Author\Models\Author;
 use Modules\Visitor\Models\Visitor;
@@ -16,116 +17,168 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create Admin user
-        $admin = User::firstOrCreate(
-            ['email' => 'admin@example.com'],
-            [
-                'name' => 'کاربر مدیر',
-                'password' => Hash::make('Admin@123'),
-                'email_verified_at' => now(),
-                'remember_token' => \Illuminate\Support\Str::random(10),
-            ]
-        );
-        $admin->assignRole('admin');
-        
-        // Create statistics for admin if not exists
-        UserStatistic::firstOrCreate(
-            ['user_id' => $admin->id],
-            [
-                'login_count' => 1,
-                'last_login_at' => now(),
-            ]
-        );
+        $this->command->info('Starting User Seeder...');
 
-        // Create Author user
-        $author = User::firstOrCreate(
-            ['email' => 'author@example.com'],
-            [
-                'name' => 'کاربر نویسنده',
-                'password' => Hash::make('Author@123'),
-                'email_verified_at' => now(),
-                'remember_token' => \Illuminate\Support\Str::random(10),
-            ]
-        );
-        $author->assignRole('author');
-        
-        // Create author profile if not exists
-        Author::firstOrCreate(
-            ['user_id' => $author->id],
-            [
-                'bio' => 'تولید کننده محتوای حرفه‌ای با تخصص در بازاریابی دیجیتال و بهینه‌سازی سئو.',
-                'website' => 'https://author-example.com',
-                'social_media' => json_encode([
-                    'twitter' => 'https://twitter.com/authorexample',
-                    'linkedin' => 'https://linkedin.com/in/authorexample',
-                ]),
-                'status' => 'active',
-            ]
-        );
-        
-        // Create statistics for author if not exists
-        UserStatistic::firstOrCreate(
-            ['user_id' => $author->id],
-            [
-                'login_count' => 1,
-                'last_login_at' => now(),
-            ]
-        );
+        // Check if the users table exists before trying to seed
+        if (!Schema::hasTable('users')) {
+            $this->command->info('Skipping UserSeeder: Users table does not exist.');
+            return;
+        }
 
-        // Create Visitor user
-        $visitor = User::firstOrCreate(
-            ['email' => 'visitor@example.com'],
-            [
-                'name' => 'کاربر بازدیدکننده',
-                'password' => Hash::make('Visitor@123'),
-                'email_verified_at' => now(),
-                'remember_token' => \Illuminate\Support\Str::random(10),
-            ]
-        );
-        $visitor->assignRole('visitor');
+        // Get column listing from users table
+        $userColumns = Schema::getColumnListing('users');
+        $this->command->info('Available columns in users table: ' . implode(', ', $userColumns));
+
+        // Create admin user
+        $this->createAdminUser($userColumns);
         
-        // Create visitor profile
-        Visitor::create([
-            'ip_address' => fake()->ipv4(),
-            'user_agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-            'country' => 'US',
-            'city' => 'New York',
-            'browser' => 'Chrome',
-            'os' => 'Windows',
-            'device_type' => 'desktop',
-            'utm_source' => 'direct',
-            'is_unique' => true,
-            'last_activity_at' => now(),
-        ]);
+        // Create author user
+        $this->createAuthorUser($userColumns);
         
-        // Create statistics for visitor
-        UserStatistic::create([
-            'user_id' => $visitor->id,
-            'login_count' => 1,
-            'last_login_at' => now(),
-        ]);
+        // Create visitor user
+        $this->createVisitorUser($userColumns);
         
-        // Create additional users with 'user' role for testing
-        for ($i = 1; $i <= 5; $i++) {
-            $user = User::firstOrCreate(
-                ['email' => "user{$i}@example.com"],
-                [
-                    'name' => "کاربر آزمایشی {$i}",
-                    'password' => Hash::make('Password@123'),
-                    'email_verified_at' => now(),
-                    'remember_token' => \Illuminate\Support\Str::random(10),
-                ]
+        $this->command->info('User data seeded successfully!');
+    }
+    
+    /**
+     * Create admin user
+     */
+    private function createAdminUser($columns)
+    {
+        // Base admin data
+        $admin = [
+            'name' => 'مدیر سایت',
+            'email' => 'admin@example.com',
+            'password' => Hash::make('password'),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ];
+        
+        // Add additional fields if they exist
+        if (in_array('is_admin', $columns)) {
+            $admin['is_admin'] = true;
+        }
+        
+        if (in_array('role', $columns)) {
+            $admin['role'] = 'admin';
+        }
+        
+        if (in_array('username', $columns)) {
+            $admin['username'] = 'admin';
+        }
+        
+        if (in_array('status', $columns)) {
+            $admin['status'] = 'active';
+        }
+        
+        if (in_array('email_verified_at', $columns)) {
+            $admin['email_verified_at'] = now();
+        }
+        
+        try {
+            // Insert or update admin user
+            DB::table('users')->updateOrInsert(
+                ['email' => $admin['email']],
+                $admin
             );
-            $user->assignRole('user');
-            
-            // Create statistics for test users if not exists
-            UserStatistic::firstOrCreate(
-                ['user_id' => $user->id],
-                [
-                    'login_count' => rand(1, 10),
-                    'last_login_at' => now()->subDays(rand(1, 30)),
-                ]
+            $this->command->info('Admin user created or updated successfully.');
+        } catch (\Exception $e) {
+            $this->command->error('Error creating admin user: ' . $e->getMessage());
+        }
+    }
+    
+    /**
+     * Create author user
+     */
+    private function createAuthorUser($columns)
+    {
+        // Base author data
+        $author = [
+            'name' => 'نویسنده',
+            'email' => 'author@example.com',
+            'password' => Hash::make('password'),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ];
+        
+        // Add additional fields if they exist
+        if (in_array('is_admin', $columns)) {
+            $author['is_admin'] = false;
+        }
+        
+        if (in_array('role', $columns)) {
+            $author['role'] = 'author';
+        }
+        
+        if (in_array('username', $columns)) {
+            $author['username'] = 'author';
+        }
+        
+        if (in_array('status', $columns)) {
+            $author['status'] = 'active';
+        }
+        
+        if (in_array('email_verified_at', $columns)) {
+            $author['email_verified_at'] = now();
+        }
+        
+        try {
+            // Insert or update author user
+            DB::table('users')->updateOrInsert(
+                ['email' => $author['email']],
+                $author
             );
+            $this->command->info('Author user created or updated successfully.');
+        } catch (\Exception $e) {
+            $this->command->error('Error creating author user: ' . $e->getMessage());
+        }
+    }
+    
+    /**
+     * Create visitor user
+     */
+    private function createVisitorUser($columns)
+    {
+        // Base visitor data
+        $visitor = [
+            'name' => 'بازدیدکننده',
+            'email' => 'visitor@example.com',
+            'password' => Hash::make('password'),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ];
+        
+        // Add additional fields if they exist
+        if (in_array('is_admin', $columns)) {
+            $visitor['is_admin'] = false;
+        }
+        
+        if (in_array('role', $columns)) {
+            $visitor['role'] = 'visitor';
+        }
+        
+        if (in_array('username', $columns)) {
+            $visitor['username'] = 'visitor';
+        }
+        
+        if (in_array('status', $columns)) {
+            $visitor['status'] = 'active';
+        }
+        
+        if (in_array('email_verified_at', $columns)) {
+            $visitor['email_verified_at'] = now();
+        }
+        
+        try {
+            // Insert or update visitor user
+            DB::table('users')->updateOrInsert(
+                ['email' => $visitor['email']],
+                $visitor
+            );
+            $this->command->info('Visitor user created or updated successfully.');
+        } catch (\Exception $e) {
+            $this->command->error('Error creating visitor user: ' . $e->getMessage());
         }
     }
 } 

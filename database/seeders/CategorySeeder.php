@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Schema;
 use Modules\Content\app\Models\Category;
 
 class CategorySeeder extends Seeder
@@ -12,6 +13,14 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
+        $this->command->info('Starting Category Seeder...');
+
+        // Check if the categories table exists
+        if (!Schema::hasTable('categories')) {
+            $this->command->info('Skipping CategorySeeder: Categories table does not exist.');
+            return;
+        }
+
         $categories = [
             [
                 'title' => 'Technology',
@@ -96,7 +105,14 @@ class CategorySeeder extends Seeder
         ];
 
         foreach ($categories as $category) {
-            Category::firstOrCreate(['slug' => $category['slug']], $category);
+            try {
+                Category::firstOrCreate(['slug' => $category['slug']], $category);
+                $this->command->info("Created or updated category: {$category['title']}");
+            } catch (\Exception $e) {
+                $this->command->error("Error creating category {$category['title']}: " . $e->getMessage());
+            }
         }
+
+        $this->command->info('Categories seeded successfully!');
     }
 } 
