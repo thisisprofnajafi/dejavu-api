@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('categories', function (Blueprint $table) {
+        Schema::create('author_categories', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('slug')->unique();
@@ -22,7 +22,7 @@ return new class extends Migration
             $table->integer('order')->default(0);
             $table->timestamps();
             
-            $table->foreign('parent_id')->references('id')->on('categories')->onDelete('set null');
+            $table->foreign('parent_id')->references('id')->on('author_categories')->onDelete('set null');
             $table->index('parent_id');
             $table->index('is_active');
             $table->index('slug');
@@ -34,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('author_categories');
     }
 }; 

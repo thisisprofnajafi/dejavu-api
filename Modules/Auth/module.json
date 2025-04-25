@@ -4,8 +4,6 @@
     "description": "Authentication module with Sanctum",
     "keywords": ["auth", "sanctum", "authentication"],
     "priority": 1,
-    "providers": [
-        "Modules\\Auth\\Providers\\ModuleServiceProvider"
-    ],
+    "providers": [],
     "files": []
 }

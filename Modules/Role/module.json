@@ -4,8 +4,6 @@
     "description": "Role and permission management module using Spatie Permission",
     "keywords": ["role", "permission", "acl", "access control"],
     "priority": 2,
-    "providers": [
-        "Modules\\Role\\Providers\\RoleServiceProvider"
-    ],
+    "providers": [],
     "files": []
 }

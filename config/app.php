@@ -173,11 +173,6 @@ return [
         App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-
-        /*
-         * Module Service Providers...
-         */
-        Modules\Auth\Providers\RouteServiceProvider::class,
     ],
 
 ];
