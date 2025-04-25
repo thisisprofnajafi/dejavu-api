@@ -45,6 +45,7 @@ jobs:
           host: ftp.abolfazlnajafi.com
           username: dejavu-api@abolfazlnajafi.com
           password: Prof48017421@#
+          port: 2222
           script: |
             cd /
             composer update --no-interaction
