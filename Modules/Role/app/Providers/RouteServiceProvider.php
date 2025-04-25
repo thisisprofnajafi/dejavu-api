@@ -10,6 +10,16 @@ class RouteServiceProvider extends ServiceProvider
     protected string $name = 'Role';
 
     /**
+     * Register any services.
+     */
+    public function register(): void
+    {
+        $this->app->booted(function () {
+            $this->map();
+        });
+    }
+
+    /**
      * Called before routes are registered.
      *
      * Register any model bindings or pattern based filters.

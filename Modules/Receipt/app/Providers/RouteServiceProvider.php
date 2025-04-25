@@ -13,6 +13,16 @@ class RouteServiceProvider extends ServiceProvider
     protected string $moduleNamespace = 'Modules\Receipt\app\Http\Controllers';
 
     /**
+     * Register any services.
+     */
+    public function register(): void
+    {
+        $this->app->booted(function () {
+            $this->map();
+        });
+    }
+
+    /**
      * Called before routes are registered.
      *
      * Register any model bindings or pattern based filters.
