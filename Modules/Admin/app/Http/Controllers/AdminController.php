@@ -4,53 +4,100 @@ namespace Modules\Admin\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Modules\Admin\Models\AdminDashboard;
+use Modules\Admin\Models\AdminActivity;
+use Modules\Admin\Services\AdminDashboardService;
+use Modules\User\Models\User;
 
 class AdminController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    protected $dashboardService;
+
+    public function __construct(AdminDashboardService $dashboardService)
     {
-        return view('admin::index');
+        $this->dashboardService = $dashboardService;
+        $this->middleware('can:access admin panel');
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Display the admin dashboard
      */
-    public function create()
+    public function index(Request $request)
     {
-        return view('admin::create');
+        // Get user dashboard or default if none exists
+        $user = auth()->user();
+        $dashboard = $this->dashboardService->getUserDashboard($user->id);
+        
+        // Get summary statistics
+        $userCount = User::count();
+        $adminCount = User::role('admin')->count();
+        $recentActivities = AdminActivity::with('user')->latest()->limit(10)->get();
+        
+        // Log admin login activity
+        AdminActivity::logLogin();
+        
+        return view('admin::dashboard', compact('dashboard', 'userCount', 'adminCount', 'recentActivities'));
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Get admin dashboard widgets data
      */
-    public function store(Request $request) {}
-
-    /**
-     * Show the specified resource.
-     */
-    public function show($id)
+    public function dashboardData(Request $request)
     {
-        return view('admin::show');
+        $data = $this->dashboardService->getDashboardData($request->all());
+        
+        return response()->json([
+            'success' => true,
+            'data' => $data
+        ]);
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Save a custom dashboard layout
      */
-    public function edit($id)
+    public function saveDashboard(Request $request)
     {
-        return view('admin::edit');
+        $user = auth()->user();
+        
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'is_default' => 'boolean',
+            'layout' => 'array',
+            'widgets' => 'array',
+        ]);
+        
+        $dashboard = $this->dashboardService->saveDashboard($user->id, $data);
+        
+        return response()->json([
+            'success' => true,
+            'data' => $dashboard
+        ]);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Delete a dashboard
      */
-    public function update(Request $request, $id) {}
+    public function deleteDashboard(Request $request, $id)
+    {
+        $user = auth()->user();
+        $result = $this->dashboardService->deleteDashboard($user->id, $id);
+        
+        return response()->json([
+            'success' => $result,
+            'message' => $result ? 'Dashboard deleted successfully' : 'Unable to delete dashboard',
+        ]);
+    }
 
     /**
-     * Remove the specified resource from storage.
+     * Get system information
      */
-    public function destroy($id) {}
+    public function systemInfo()
+    {
+        $data = $this->dashboardService->getSystemInfo();
+        
+        return response()->json([
+            'success' => true,
+            'data' => $data
+        ]);
+    }
 }

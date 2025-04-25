@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
+use Modules\User\Models\UserStatistic;
+use Modules\Author\Models\Author;
+
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
@@ -44,5 +47,21 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Get the user statistic associated with the user.
+     */
+    public function userStatistic()
+    {
+        return $this->hasOne(UserStatistic::class);
+    }
+
+    /**
+     * Get the author profile associated with the user.
+     */
+    public function author()
+    {
+        return $this->hasOne(Author::class);
     }
 }
