@@ -27,6 +27,9 @@ class RoleServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->name, 'database/migrations'));
+        
+        // Register gate permissions
+        $this->registerPermissions();
     }
 
     /**
@@ -131,5 +134,32 @@ class RoleServiceProvider extends ServiceProvider
         }
 
         return $paths;
+    }
+
+    /**
+     * Register permissions with Laravel Gates.
+     */
+    protected function registerPermissions(): void
+    {
+        // If the app is in console, don't register permissions
+        if ($this->app->runningInConsole()) {
+            return;
+        }
+        
+        // Get the permission class
+        $permissionClass = app(config('permission.models.permission'));
+        
+        // Check if permissions table exists
+        try {
+            $permissions = $permissionClass::all();
+            
+            foreach ($permissions as $permission) {
+                \Gate::define($permission->name, function ($user) use ($permission) {
+                    return $user->hasPermissionTo($permission);
+                });
+            }
+        } catch (\Exception $e) {
+            // If table doesn't exist or connection fails, just continue
+        }
     }
 }
