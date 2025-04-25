@@ -1,3 +1,8 @@
 {
-    "Auth": true
+    "Auth": true,
+    "User": true,
+    "Role": true,
+    "Admin": true,
+    "Author": true,
+    "Visitor": true
 }
