@@ -11,6 +11,51 @@ This directory contains all the modules for the DejaVu API project.
 5. **Author Module**: Content creation and management for authors
 6. **Visitor Module**: Referral system and customer tracking
 
+## Dashboard Information
+
+### Admin Dashboard
+- **URL**: `/api/v1/admin/dashboard`
+- **Features**:
+  - Key metrics widget showing statistics in visually appealing cards
+  - Activity logging with recent user actions
+  - Active users overview with status indicators
+  - Site health monitoring with issues categorization
+  - Content metrics with most popular content and publishing statistics
+  - Menu management quick access widget
+  - Role-based access control information
+  - System settings management
+
+### Author Dashboard
+- **URL**: `/api/v1/authors/{id}`
+- **Features**:
+  - Author profile overview with social media links
+  - Publication statistics and metrics
+  - Quick action cards for content creation and management
+  - Content management section showing recent and popular publications
+  - Category analytics with visualization
+  - Comment moderation tools with approval workflow
+  - Earnings tracking
+  - Tag organization
+
+### Visitor Dashboard
+- **URL**: `/api/v1/analytics/dashboard`
+- **Features**:
+  - Visitor and page view statistics
+  - Traffic trends visualization with area charts
+  - Traffic source analysis with pie charts
+  - Device, browser and OS breakdowns
+  - Top pages performance metrics
+  - Geographical distribution of visitors
+  - Event tracking for user interactions
+  - Conversion rate analytics
+
+### Common Dashboard Features
+- Loading states
+- Error handling
+- Responsive layouts
+- Data visualization components
+- Consistent UI components using the design system
+
 ## Module Structure
 
 Each module follows a consistent structure:
